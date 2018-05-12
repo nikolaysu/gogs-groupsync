@@ -1,0 +1,2 @@
+class GroupsyncError(Exception):
+    pass

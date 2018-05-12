@@ -1,0 +1,32 @@
+[ldap]
+server = 'ldap://localhost'
+group-base-dn = 'ou=groups,dc=example,dc=org'
+bind-dn = 'cn=admin,dc=example,dc=org'
+password = '.secret.'
+
+[gogs]
+base-url = 'https://gogs.example.org/api/v1'
+    [gogs.db]
+    name = 'gogs'
+    host = 'localhost'
+    port = 5432
+    user = 'gogs'
+    password = '.secret.'
+
+[[mapping]]
+    [mapping.ldap]
+        group-cn = 'Admin'
+
+    [mapping.gogs]
+    org = 'groupsync-test'
+    team = 'Owners'
+    auth-token = '.secret.'
+
+[[mapping]]
+    [mapping.ldap]
+    group-cn = 'Example'
+
+    [mapping.gogs]
+    org = 'groupsync-test'
+    team = 'example'
+    auth-token = '.secret.'
