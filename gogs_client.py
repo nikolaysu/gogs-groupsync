@@ -99,23 +99,3 @@ class GogsApiClient:
                 return result[0] # <- uid
             else:
                 return None
-
-    INSERT_INTO_ORG_QUERY = """
-        INSERT INTO org_user (org_id, uid, is_public, is_owner)
-        VALUES (%s, %s, %s, %s);
-    """
-    """def add_user_to_org(self, org_id, user_id, is_public, is_owner):
-        with self.pg_conn.cursor() as cur:
-            cur.execute(self.INSERT_INTO_ORG_QUERY,
-                        (org_id, user_id, is_public, is_owner))"""
-
-    DELETE_FROM_ORG_QUERY = """
-        DELETE FROM org_user
-        WHERE org_id=%s AND uid=%s;
-    """
-    DECREMENT_MEMBER_COUNT = 'UPDATE "user" SET num_members = num_members - 1 WHERE id=%s'
-    def remove_user_from_org(self, org_id, user_id):
-        with self.pg_conn.cursor() as cur:
-            cur.execute(self.DELETE_FROM_ORG_QUERY, (org_id, user_id))
-            cur.execute(self.DECREMENT_MEMBER_COUNT, (org_id,))
-            self.pg_conn.commit()
