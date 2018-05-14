@@ -9,7 +9,7 @@ class LdapClient:
         self.server = server
         self.conn = ldap.initialize(server)
         self.group_base_dn = group_base_dn
-        
+
         try:
             self.conn.protocol_version = ldap.VERSION3
             self.conn.simple_bind_s(bind_dn, password)

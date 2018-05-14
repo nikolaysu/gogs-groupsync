@@ -26,9 +26,9 @@ class Mapping:
         self.is_owner = dict['gogs'].get('is_owner', False)
 
         self.type = 'team' if self.target_team else 'org'
-        
+
         self.target = f"{self.target_org}/{self.target_team}"
-    
+
     def __str__(self):
         if self.type == 'team':
             return f"{self.cn}->{self.target_org}/{self.target_team}"
@@ -53,7 +53,7 @@ def sync_team(mapping, ldap, gogs):
     ])
     if not len(ldap_group_members):
         raise GroupsyncError("LDAP: Empty group")
-    
+
     teams = [team for team in gogs.get_teams_for_org(mapping.target_org, mapping.auth_token)
              if team['name'] == mapping.target_team]
     if len(teams) != 1:
@@ -93,7 +93,7 @@ def sync_org(mapping, ldap, gogs):
         raise GroupsyncError("LDAP: Empty group")
 
     org_id = gogs.get_org_id(mapping.target_org)
-    
+
     current_members = set(gogs.get_org_members(org_id))
     users_to_remove = current_members.difference(ldap_group_members)
 
@@ -117,7 +117,7 @@ def main(config_filename):
         bind_dn=config['ldap']['bind-dn'],
         password=config['ldap']['password'],
         group_base_dn=config['ldap']['group-base-dn'])
-    
+
     with GogsApiClient(
             base_url=config['gogs']['base-url'],
             db_config=config['gogs']['db'],
@@ -131,7 +131,7 @@ def main(config_filename):
             except KeyError as e:
                 logger.warning(f"Skipping {mapping}:\n\t{e}")
                 continue
-        
+
         for mapping in sorted(mappings, key=lambda m: m.type, reverse=True):
             try:
                 process_mapping(mapping, ldap, gogs)

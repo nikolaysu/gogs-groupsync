@@ -21,10 +21,10 @@ class GogsApiClient:
             password=db_config['password'],
             connection_factory=LoggingConnection)
         self.pg_conn.initialize(logger)
-    
+
     def close(self):
         self.pg_conn.close()
-        
+
     def get_teams_for_org(self, org_name, token):
         path = '/orgs/{}/teams'.format(org_name)
         try:
@@ -44,7 +44,7 @@ class GogsApiClient:
                 return [uid[0] for uid in cur]
         except Exception as e:
             raise GroupsyncError("GOGS:DB: Failed to retrieve members of team {}: {}".format(team_id, e))
-        
+
     def add_user_to_team(self, team_id, username, token):
         path = '/admin/teams/{}/members/{}'.format(team_id, username)
         try:
@@ -57,7 +57,7 @@ class GogsApiClient:
         except Exception as e:
             raise GroupsyncError("GOGS: Failed to add {} to team: {}".format(username, e))
         return True
-            
+
     def remove_user_from_team(self, team_id, username, token):
         path = '/admin/teams/{}/members/{}'.format(team_id, username)
         try:
