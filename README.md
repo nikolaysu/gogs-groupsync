@@ -1,11 +1,23 @@
 # gogs-groupsync
-When run, this script synchronizes LDAP groups with Teams within Gogs organizations. For this, the following is needed:
+When run, this script synchronizes [LDAP](https://en.wikipedia.org/wiki/LDAP) groups with Teams within [Gogs](https://gogs.io) organizations. For this, the following is needed:
 
 * Bind access to the LDAP server in order to query it for the members of each group.
 * For each team to be synchornized, a Gogs API token with the access rights to add and remove team members (i.e., a token of one of the organization's owners). This token can be provided separately for each mapping.
 * Due to limitations of the Gogs HTTP API (which as of May 2018 allows adding and removing team members but not listing the current members of a team), database credentials which allow read access to the Gogs database (only Postgresql is supported for now) are also needed. The database is queried for a list of current members of each team.
 
-See `config.toml.example` for an example configuration, which synchronizes two LDAP groups with two teams within the Gogs organization `groupsync-test`.
+## Usage
+
+First, create a [TOML](https://github.com/toml-lang/toml) configuration file. See `config.toml.example` for an example configuration, which synchronizes two LDAP groups with two teams within the Gogs organization `groupsync-test`.
+
+Then, run
+
+    $ ./groupsync.py <configfile>
+    
+You may need several Python dependencies, which you can install using
+
+    $ pip install -r requirements.txt
+    
+Preferably, this should be done inside a virtualenv.
 
 ## Known limitations
 
