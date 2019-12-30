@@ -3,9 +3,11 @@ from common import GroupsyncError
 
 
 class LdapClient:
-    GROUP_SEARCH_FILTER = '(&(cn={cn})(objectClass=posixGroup))'
+    GROUP_SEARCH_FILTER = '(&(objectCategory=Person)(memberOf:1.2.840.113556.1.4.1941:={cn}))'
 
     def __init__(self, server, bind_dn, password, group_base_dn):
+        #ldap.set_option(ldap.OPT_DEBUG_LEVEL, 4095)
+
         self.server = server
         self.conn = ldap.initialize(server)
         self.group_base_dn = group_base_dn
@@ -21,7 +23,8 @@ class LdapClient:
             result_id = self.conn.search(
                 base=self.group_base_dn,
                 scope=ldap.SCOPE_SUBTREE,
-                filterstr=self.GROUP_SEARCH_FILTER.format(cn=group_cn))
+                filterstr=self.GROUP_SEARCH_FILTER.format(cn=group_cn),
+                attrlist=['sAMAccountName'])
 
             results = []
             while 1:
@@ -30,8 +33,8 @@ class LdapClient:
                     break
                 else:
                     if kind == ldap.RES_SEARCH_ENTRY:
-                        results.append(data)
+                        results.append(data[0][1]['sAMAccountName'][0])
 
-            return results[0][0][1]['memberUid']
+            return results
         except Exception as e:
             raise GroupsyncError("LDAP: Failed to lookup group '{}' at '{}': {}".format(group_cn, self.server, e))

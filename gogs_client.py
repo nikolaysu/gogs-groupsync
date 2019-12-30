@@ -19,6 +19,7 @@ class GogsApiClient:
             port=db_config['port'],
             user=db_config['user'],
             password=db_config['password'],
+            sslmode='disable',
             connection_factory=LoggingConnection)
         self.pg_conn.initialize(logger)
 
