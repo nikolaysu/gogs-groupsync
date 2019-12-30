@@ -1,3 +1,9 @@
+# Fork Features
+* Disable SSL connection to Postgresql
+* LDAP group member's from Microsoft Active Directory 
+
+**Important: mapping group-cn must contain Distinguished Name(Cn=XX,ou=yyy,dc=abcd,dc=com)**
+
 # gogs-groupsync
 When run, this script synchronizes [LDAP](https://en.wikipedia.org/wiki/LDAP) groups with Teams within [Gogs](https://gogs.io) organizations. For this, the following is needed:
 
